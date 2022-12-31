@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "1039387784271",
+    "project_id": "mini-medical",
+    "storage_bucket": "mini-medical.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1039387784271:android:e680cf716bbae9e392a63a",
+        "android_client_info": {
+          "package_name": "com.example.meni_medical"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1039387784271-8c03kpsefs4kf212gc8pk5c8p8oh21nk.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJed-TDOd4I93FV6ZIcRjogwPN6KUrSqk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1039387784271-8c03kpsefs4kf212gc8pk5c8p8oh21nk.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
