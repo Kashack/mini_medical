@@ -7,7 +7,6 @@ import 'package:meni_medical/presentation/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'presentation/doctor/doctor_bio.dart';
 import 'presentation/sign_in.dart';
-import 'package:timezone/data/latest.dart' as tz;
 
 bool? isDoctor = false;
 bool? fillBio = false;
@@ -15,7 +14,6 @@ bool? fillBio = false;
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationApi.init();
-  tz.initializeTimeZones();
   SharedPreferences? prefs = await SharedPreferences.getInstance();
   isDoctor = prefs.getBool('isDoctor');
   fillBio = prefs.getBool('fillBio');
@@ -35,6 +33,13 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        appBarTheme: AppBarTheme(
+          elevation: 0,
+          color: Colors.white,
+          iconTheme: IconThemeData(
+              color: Colors.black
+          ),
+        )
       ),
       home: MainPage(),
     );

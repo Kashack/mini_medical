@@ -47,7 +47,7 @@ class DoctorCompletedAppointment extends StatelessWidget {
                     return StreamBuilder(
                         stream: _firestore
                             .collection('users')
-                            .doc(data['doctor_uid'])
+                            .doc(data['userUid'])
                             .snapshots(),
                         builder: (context, snapshots) {
                           if (snapshots.hasError) {
@@ -95,7 +95,7 @@ class DoctorCompletedAppointment extends StatelessWidget {
                                               MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(
-                                              'Dr. ${snapshots.data!.get('fullname')}',
+                                              '${snapshots.data!.get('fullname')}',
                                               style: TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
@@ -108,36 +108,6 @@ class DoctorCompletedAppointment extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                Divider(),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    OutlinedButton(
-                                      onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => BookAppointmentPage(doctorUid: data['doctor_uid'], re_schedule: false),));
-                                      },
-                                      style: OutlinedButton.styleFrom(
-                                          side: BorderSide(
-                                              color: MyConstant.mainColor)),
-                                      child: Text(
-                                        'Book again',
-                                        style: TextStyle(
-                                            color: MyConstant.mainColor),
-                                      ),
-                                    ),
-                                    MaterialButton(
-                                      onPressed: () {},
-                                      color: MyConstant.mainColor,
-                                      child: Text(
-                                        'Leave a review',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  ],
-                                )
                               ],
                             ),
                           );

@@ -40,15 +40,35 @@ class UpcomingAppointment extends StatelessWidget {
                   .map((DocumentSnapshot document) {
                     Map<String, dynamic> data =
                         document.data()! as Map<String, dynamic>;
-                    DateTime dateTime = data['appointment_start'].toDate();
-                    String formattedDate = DateFormat.MMMEd().format(dateTime);
-                    String formattedTime = DateFormat.jm().format(dateTime);
-                    if (dateTime.isBefore(now)) {
+                    DateTime startDateTime = data['appointment_start'].toDate();
+                    DateTime endDateTime = data['appointment_end'].toDate();
+                    String formattedDate = DateFormat.MMMEd().format(startDateTime);
+                    String formattedTime = DateFormat.jm().format(startDateTime);
+                    if (startDateTime.isBefore(now) || startDateTime == now) {
                       try {
                         _firestore
                             .collection('appointments')
                             .doc(document.id)
                             .update({'appointment_status': 'Ongoing'});
+                      } on FirebaseException catch (e) {
+                        if (e.code == "network-request-failed") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Network failed'),
+                            ),
+                          );
+                        } else {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              SnackBar(content: Text('${e.code}')));
+                        }
+                      }
+                    }
+                    if (endDateTime.isBefore(now) || endDateTime == now) {
+                      try {
+                        _firestore
+                            .collection('appointments')
+                            .doc(document.id)
+                            .update({'appointment_status': 'Completed'});
                       } on FirebaseException catch (e) {
                         if (e.code == "network-request-failed") {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -76,14 +96,14 @@ class UpcomingAppointment extends StatelessWidget {
                               ConnectionState.waiting) {
                             return Center(child: CircularProgressIndicator());
                           }
-                          if (dateTime.isAfter(now) ||
-                              dateTime == now) {
-                            NotificationApi.showScheduleNotification(
-                                scheduleDate: dateTime,
+                          if (startDateTime.isAfter(now) || startDateTime == now) {
+                            NotificationApi
+                                .showScheduleNotification(
+                                id: 2,
+                                scheduleDate: startDateTime,
                                 title: snapshots.data!.get('fullname'),
                                 body: 'Start Cosultation',
-                                payload: ''
-                            );
+                                payload: '');
                           }
                           return Container(
                             height: 160,
@@ -102,14 +122,15 @@ class UpcomingAppointment extends StatelessWidget {
                                         height: 80,
                                         width: 80,
                                         decoration: BoxDecoration(
-                                            borderRadius: BorderRadius.circular(50),
+                                            borderRadius:
+                                                BorderRadius.circular(50),
                                             image: DecorationImage(
-                                                image: CachedNetworkImageProvider(
-                                                  snapshots.data!.get('profilePicUrl'),
+                                                image:
+                                                    CachedNetworkImageProvider(
+                                                  snapshots.data!
+                                                      .get('profilePicUrl'),
                                                 ),
-                                                fit: BoxFit.cover
-                                            )
-                                        ),
+                                                fit: BoxFit.cover)),
                                       ),
                                       Padding(
                                         padding: const EdgeInsets.all(8.0),
@@ -219,6 +240,13 @@ class UpcomingAppointment extends StatelessWidget {
                                             color: MyConstant.mainColor),
                                       ),
                                     ),
+                                    MaterialButton(
+                                      child: Text('Re - schedule'),
+                                      onPressed: () {
+
+                                      },
+                                      color: MyConstant.mainColor,
+                                    )
                                   ],
                                 )
                               ],

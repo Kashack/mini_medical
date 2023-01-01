@@ -146,113 +146,86 @@ class DoctorUpcomingAppointment extends StatelessWidget {
                                   ),
                                 ),
                                 Divider(),
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceEvenly,
-                                  children: [
-                                    OutlinedButton(
-                                      onPressed: () {
-                                        showDialog(
-                                          context: context,
-                                          builder: (context) {
-                                            return AlertDialog(
-                                              title: Text('Cancel Appointment'),
-                                              titleTextStyle:
-                                                  TextStyle(color: Colors.red),
-                                              content: Text(
-                                                  'Are u sure u want Cancel the appointment'),
-                                              actions: [
-                                                TextButton(
-                                                  onPressed: () {
+                                OutlinedButton(
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Cancel Appointment'),
+                                          titleTextStyle:
+                                              TextStyle(color: Colors.red),
+                                          content: Text(
+                                              'Are u sure u want Cancel the appointment'),
+                                          actions: [
+                                            TextButton(
+                                              onPressed: () {
+                                                Navigator.pop(context);
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                  shape:
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20))),
+                                              child: Text('Back'),
+                                            ),
+                                            TextButton(
+                                              onPressed: () {
+                                                try {
+                                                  _firestore
+                                                      .collection(
+                                                          'appointments')
+                                                      .doc(document.id)
+                                                      .update({
+                                                    'appointment_status':
+                                                        'Cancelled'
+                                                  }).then((value) {
                                                     Navigator.pop(context);
-                                                  },
-                                                  style: OutlinedButton.styleFrom(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20))),
-                                                  child: Text('Back'),
-                                                ),
-                                                TextButton(
-                                                  onPressed: () {
-                                                    try {
-                                                      _firestore
-                                                          .collection(
-                                                              'appointments')
-                                                          .doc(document.id)
-                                                          .update({
-                                                        'appointment_status':
-                                                            'Cancelled'
-                                                      }).then((value) {
-                                                        Navigator.pop(context);
-                                                      });
-                                                    } on FirebaseException catch (e) {
-                                                      if (e.code ==
-                                                          "network-request-failed") {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(
-                                                          SnackBar(
+                                                  });
+                                                } on FirebaseException catch (e) {
+                                                  if (e.code ==
+                                                      "network-request-failed") {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(
+                                                      SnackBar(
+                                                        content: Text(
+                                                            'Network failed'),
+                                                      ),
+                                                    );
+                                                  } else {
+                                                    ScaffoldMessenger.of(
+                                                            context)
+                                                        .showSnackBar(SnackBar(
                                                             content: Text(
-                                                                'Network failed'),
-                                                          ),
-                                                        );
-                                                      } else {
-                                                        ScaffoldMessenger.of(
-                                                                context)
-                                                            .showSnackBar(SnackBar(
-                                                                content: Text(
-                                                                    '${e.code}')));
-                                                      }
-                                                    }
-                                                  },
-                                                  style: OutlinedButton.styleFrom(
-                                                      shape:
-                                                          RoundedRectangleBorder(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(
-                                                                          20))),
-                                                  child: Text('Confirm'),
-                                                ),
-                                              ],
-                                            );
-                                          },
+                                                                '${e.code}')));
+                                                  }
+                                                }
+                                              },
+                                              style: OutlinedButton.styleFrom(
+                                                  shape:
+                                                      RoundedRectangleBorder(
+                                                          borderRadius:
+                                                              BorderRadius
+                                                                  .circular(
+                                                                      20))),
+                                              child: Text('Confirm'),
+                                            ),
+                                          ],
                                         );
                                       },
-                                      style: OutlinedButton.styleFrom(
-                                          side: BorderSide(
-                                              color: MyConstant.mainColor)),
-                                      child: Text(
-                                        'Cancel Appointment',
-                                        style: TextStyle(
-                                            color: MyConstant.mainColor),
-                                      ),
-                                    ),
-                                    MaterialButton(
-                                      onPressed: () {
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                            builder: (context) =>
-                                                BookAppointmentPage(
-                                                    doctorUid:
-                                                        document['doctor_uid'],
-                                                    re_schedule: true),
-                                          ),
-                                        );
-                                      },
-                                      color: MyConstant.mainColor,
-                                      child: Text(
-                                        'Re-schedule',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                        ),
-                                      ),
-                                    )
-                                  ],
+                                    );
+                                  },
+                                  style: OutlinedButton.styleFrom(
+                                      side: BorderSide(
+                                          color: MyConstant.mainColor)),
+                                  child: Text(
+                                    'Cancel Appointment',
+                                    style: TextStyle(
+                                        color: MyConstant.mainColor),
+                                  ),
                                 )
                               ],
                             ),

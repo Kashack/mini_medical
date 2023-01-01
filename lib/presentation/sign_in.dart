@@ -96,10 +96,10 @@ class _SignInPageState extends State<SignInPage> {
                       buttonText: 'Sign In',
                       onPressed: () async {
                         FocusScope.of(context).unfocus();
-                        setState(() {
-                          _isLoading = true;
-                        });
                         if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isLoading = true;
+                          });
                          bool check = await authentication.SigninAuthentication(
                               email: email!, password: password!);
                           setState(() {

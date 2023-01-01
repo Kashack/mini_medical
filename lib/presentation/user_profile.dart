@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:meni_medical/data/database_helper.dart';
 import 'package:meni_medical/presentation/doctor/bottom_nav/doctor_profile.dart';
 import 'package:meni_medical/presentation/patient/bottom_nav/patient_profile.dart';
 import 'package:meni_medical/presentation/sign_in.dart';
@@ -10,12 +14,14 @@ import 'package:shared_preferences/shared_preferences.dart';
 class UserProfile extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final ImagePicker _picker = ImagePicker();
   bool isDoctor;
 
   UserProfile({required this.isDoctor});
 
   @override
   Widget build(BuildContext context) {
+    DatabaseHelper dbHelper = DatabaseHelper(context);
     final Stream<DocumentSnapshot> userStream =
         _firestore.collection('users').doc(_auth.currentUser!.uid).snapshots();
     return Scaffold(
@@ -45,38 +51,47 @@ class UserProfile extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Stack(
-                        children: [
-                          getSnap.containsKey('profilePicUrl') == false
-                              ? CircleAvatar(
-                                  radius: 50,
-                                  child: Icon(Icons.camera_alt_outlined),
-                                )
-                              : Container(
-                                  height: 80,
-                                  width: 80,
+                      GestureDetector(
+                        child: Stack(
+                          children: [
+                            getSnap.containsKey('profilePicUrl') == false
+                                ? CircleAvatar(
+                                    radius: 50,
+                                    child: Icon(Icons.camera_alt_outlined),
+                                  )
+                                : Container(
+                                    height: 100,
+                                    width: 100,
+                                    decoration: BoxDecoration(
+                                        borderRadius: BorderRadius.circular(50),
+                                        image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                              snapshot.data!.get('profilePicUrl'),
+                                            ),
+                                            fit: BoxFit.cover)),
+                                  ),
+                            Positioned(
+                              child: Container(
+                                  padding: EdgeInsets.all(2),
                                   decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(50),
-                                      image: DecorationImage(
-                                          image: CachedNetworkImageProvider(
-                                            snapshot.data!.get('profilePicUrl'),
-                                          ),
-                                          fit: BoxFit.cover)),
-                                ),
-                          Positioned(
-                            child: Container(
-                                padding: EdgeInsets.all(2),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
-                                    color: Color(0xFF555FD2)),
-                                child: Icon(
-                                  Icons.edit,
-                                  color: Colors.white,
-                                )),
-                            bottom: 5,
-                            right: 2,
-                          )
-                        ],
+                                      borderRadius: BorderRadius.circular(10),
+                                      color: Color(0xFF555FD2)),
+                                  child: Icon(
+                                    Icons.edit,
+                                    color: Colors.white,
+                                  )),
+                              bottom: 5,
+                              right: 2,
+                            )
+                          ],
+                        ),
+                        onTap: () async {
+                          final pickedFile =
+                              await _picker.pickImage(source: ImageSource.gallery);
+                          if (pickedFile != null) {
+                            await dbHelper.update(File(pickedFile.path));
+                          }
+                        },
                       ),
                       Padding(
                         padding: const EdgeInsets.all(8.0),

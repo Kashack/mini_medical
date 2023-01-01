@@ -61,7 +61,7 @@ class _PatientSignUpState extends State<PatientSignUp> {
                             return null;
                           },
                           onchanged: (value) => name = value,
-                          inputType: TextInputType.emailAddress,
+                          inputType: TextInputType.text,
                         ),
                       ),
                       Padding(

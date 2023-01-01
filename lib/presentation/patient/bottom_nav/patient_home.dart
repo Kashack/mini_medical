@@ -20,22 +20,22 @@ class PatientHome extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              TextField(
-                enabled: false,
-                decoration: InputDecoration(
-                  hintText: 'Search your specialist?',
-                  filled: true,
-                  enabledBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(style: BorderStyle.none)),
-                  focusedBorder: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(20),
-                      borderSide: BorderSide(style: BorderStyle.none)),
-                  suffixIcon: Icon(
-                    Icons.search,
-                  ),
-                ),
-              ),
+              // TextField(
+              //   enabled: false,
+              //   decoration: InputDecoration(
+              //     hintText: 'Search your specialist?',
+              //     filled: true,
+              //     enabledBorder: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //         borderSide: BorderSide(style: BorderStyle.none)),
+              //     focusedBorder: OutlineInputBorder(
+              //         borderRadius: BorderRadius.circular(20),
+              //         borderSide: BorderSide(style: BorderStyle.none)),
+              //     suffixIcon: Icon(
+              //       Icons.search,
+              //     ),
+              //   ),
+              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [

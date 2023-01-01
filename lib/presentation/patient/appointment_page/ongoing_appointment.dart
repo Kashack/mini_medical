@@ -39,11 +39,29 @@ class OngoingAppointment extends StatelessWidget {
                   .map((DocumentSnapshot document) {
                 Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
-                DateTime startDateTime = data['appointment_start'].toDate();
                 DateTime endDateTime = data['appointment_end'].toDate();
-                int duration = startDateTime.minute - endDateTime.minute ;
-                String formattedDate = DateFormat.MMMEd().format(startDateTime);
-                String formattedTime = DateFormat.jm().format(startDateTime);
+                int duration = endDateTime.minute - endDateTime.minute ;
+                String formattedDate = DateFormat.MMMEd().format(endDateTime);
+                String formattedTime = DateFormat.jm().format(endDateTime);
+                if (endDateTime.isBefore(now) || endDateTime == now) {
+                  try {
+                    _firestore
+                        .collection('appointments')
+                        .doc(document.id)
+                        .update({'appointment_status': 'Completed'});
+                  } on FirebaseException catch (e) {
+                    if (e.code == "network-request-failed") {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          content: Text('Network failed'),
+                        ),
+                      );
+                    } else {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('${e.code}')));
+                    }
+                  }
+                }
 
                 return StreamBuilder(
                     stream: _firestore
