@@ -14,8 +14,8 @@ class SpecialistFullList extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Text('Specialist List',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 16),),
+                padding: const EdgeInsets.symmetric(vertical: 16.0),
+                child: Text('Specialist List',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
               ),
               Expanded(
                 child: GridView(

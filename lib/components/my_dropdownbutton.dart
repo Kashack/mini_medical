@@ -4,7 +4,9 @@ class MyDropdownButton extends StatefulWidget {
 
   List itemList;
   Function callback;
-  MyDropdownButton({ required this.itemList, required this.callback});
+  bool enable;
+  Widget? labelText;
+  MyDropdownButton({ required this.itemList,this.labelText,this.enable = true, required this.callback});
 
   @override
   State<MyDropdownButton> createState() => _MyDropdownButtonState();
@@ -29,14 +31,16 @@ class _MyDropdownButtonState extends State<MyDropdownButton> {
         color: Colors.black,
         overflow: TextOverflow.ellipsis,
       ),
+      enableFeedback: widget.enable,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        enabledBorder:  OutlineInputBorder(
-            borderSide: BorderSide(width: 2, color: Color(0xFF555FD2),)
+        enabled: widget.enable,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(20),
+          borderSide: BorderSide.none
         ),
-        focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(width: 2, color: Color(0xFF555FD2),)
-        )
+        fillColor: Colors.grey.shade200,
+        filled: true,
+        label: widget.labelText,
       ),
       value: dropdownValue,
       items: widget.itemList.map((value) {

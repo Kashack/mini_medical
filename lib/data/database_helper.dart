@@ -16,7 +16,30 @@ class DatabaseHelper {
   DatabaseHelper(BuildContext context) {
     this.context = context;
   }
-
+  Future update(File picPath) async {
+    final filePath = 'doc_picture/profile_${_auth.currentUser!.uid}';
+    final prefs = await SharedPreferences.getInstance();
+    try{
+      await _storage.ref(filePath).putFile(picPath).then((value) {
+        value.ref.getDownloadURL().then((valueUrl) {
+          _firestore.collection('users').doc(_auth.currentUser!.uid).update({
+            'profilePicUrl': valueUrl,
+          });
+        }, onError: (e) => print("Error getting document: $e"));
+      });
+    }on FirebaseException catch (e) {
+      if (e.code == "network-request-failed") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Network failed'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('${e.code}')));
+      }
+    }
+  }
   Future<bool> saveDoctorBio(File picPath, String description) async {
     final filePath = 'doc_picture/profile_${_auth.currentUser!.uid}';
     final prefs = await SharedPreferences.getInstance();
@@ -63,7 +86,7 @@ class DatabaseHelper {
       required String doctorUid,
       required String patientProblem}) async {
     try {
-      _firestore.collection('appointments').add({
+      await _firestore.collection('appointments').add({
         'doctor_uid': doctorUid,
         'userUid': _auth.currentUser!.uid,
         'appointment_start': appointmentStart,

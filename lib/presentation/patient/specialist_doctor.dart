@@ -20,6 +20,11 @@ class SpecialistDoctorPage extends StatelessWidget {
         .where('specialization', isEqualTo: specialization)
         .snapshots();
     return Scaffold(
+      appBar: AppBar(
+        title: Text(specialization,style: TextStyle(color: Colors.black),),
+        elevation: 0,
+        backgroundColor: Colors.white,
+      ),
       body: StreamBuilder(
         stream: specialistStream,
         builder: (context, snapshot) {
