@@ -4,19 +4,37 @@ import 'package:flutter/material.dart';
 import 'package:meni_medical/data/notification_api.dart';
 import 'package:meni_medical/firebase_options.dart';
 import 'package:meni_medical/presentation/home_page.dart';
+import 'package:meni_medical/presentation/onboarding/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:workmanager/workmanager.dart';
 import 'presentation/doctor/doctor_bio.dart';
 import 'presentation/sign_in.dart';
 
 bool? isDoctor = false;
 bool? fillBio = false;
-
+bool? initScreen = true;
+void callbackDispatcher() {
+  Workmanager().executeTask((task, inputData) async {
+    // switch (task) {
+    //   case 'fetchNotification':
+    //
+    //   // Code to run in background
+    //     break;
+    // }
+    return Future.value(true);
+  });
+}
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   NotificationApi.init();
+  await Workmanager().initialize(
+    callbackDispatcher,
+  );
   SharedPreferences? prefs = await SharedPreferences.getInstance();
   isDoctor = prefs.getBool('isDoctor');
   fillBio = prefs.getBool('fillBio');
+  initScreen = await prefs.getBool('isFirstTime');
+  await prefs.setBool('isFirstTime', false);
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
@@ -41,7 +59,7 @@ class MyApp extends StatelessWidget {
           ),
         )
       ),
-      home: MainPage(),
+      home: initScreen == true || initScreen == null  ? OnboardingPage() : MainPage(),
     );
   }
 }
