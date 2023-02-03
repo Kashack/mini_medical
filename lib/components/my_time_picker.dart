@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:meni_medical/components/constant.dart';
 
-Map timeSelect = ({
+Map<String, TimeOfDay> timeSelect = ({
   '09:00 am': const TimeOfDay(hour: 9, minute: 0),
   '09:30 am': const TimeOfDay(hour: 9, minute: 30),
   '10:00 am': const TimeOfDay(hour: 10, minute: 0),
@@ -45,6 +45,7 @@ final List<bool> isTimeSelect = [
 
 class MyTimePicker extends StatefulWidget {
   final Function callback;
+
   const MyTimePicker({Key? key, required this.callback}) : super(key: key);
 
   @override
@@ -52,11 +53,27 @@ class MyTimePicker extends StatefulWidget {
 }
 
 class _MyTimePickerState extends State<MyTimePicker> {
+  final now = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
+    // for (int i = 0; i < timeSelect.length; i++) {
+    //   if (DateTime.now().isAfter(
+    //     DateTime(
+    //       now.year,
+    //       now.month,
+    //       now.day,
+    //       timeSelect.values.elementAt(i).hour,
+    //       timeSelect.values.elementAt(i).minute,
+    //     ),
+    //   )) {
+    //     timeSelect.remove(timeSelect.keys.elementAt(i));
+    //     isTimeSelect.removeAt(i);
+    //   }
+    // }
     return GridView.builder(
         gridDelegate: const SliverGridDelegateWithMaxCrossAxisExtent(
-            maxCrossAxisExtent: 100,
+          maxCrossAxisExtent: 100,
           childAspectRatio: 1,
           crossAxisSpacing: 0,
         ),
@@ -81,9 +98,10 @@ class _MyTimePickerState extends State<MyTimePicker> {
                   borderRadius: BorderRadius.circular(50),
                   color:
                       isTimeSelect[index] == true ? MyConstant.mainColor : null,
-                  border: Border.all(color: MyConstant.mainColor,width: 2)),
+                  border: Border.all(color: MyConstant.mainColor, width: 2)),
               child: Text(
-                timeSelect.keys.toList()[index],style: TextStyle(fontSize: 9),
+                timeSelect.keys.toList()[index],
+                style: TextStyle(fontSize: 9),
               ),
             ),
           );

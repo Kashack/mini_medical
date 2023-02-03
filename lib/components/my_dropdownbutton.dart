@@ -1,12 +1,18 @@
 import 'package:flutter/material.dart';
 
 class MyDropdownButton extends StatefulWidget {
-
   List itemList;
   Function callback;
   bool enable;
+  var initialValue;
   Widget? labelText;
-  MyDropdownButton({ required this.itemList,this.labelText,this.enable = true, required this.callback});
+
+  MyDropdownButton(
+      {required this.itemList,
+      this.labelText,
+      this.initialValue,
+      this.enable = true,
+      required this.callback});
 
   @override
   State<MyDropdownButton> createState() => _MyDropdownButtonState();
@@ -14,15 +20,20 @@ class MyDropdownButton extends StatefulWidget {
 
 class _MyDropdownButtonState extends State<MyDropdownButton> {
   var dropdownValue;
+
   @override
   void initState() {
-    dropdownValue = widget.itemList.indexOf(widget.itemList.first);
+    dropdownValue = widget.initialValue == null
+        ? widget.initialValue
+        : widget.itemList.indexOf(widget.itemList.first);
   }
+
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField(
+
       validator: (value) {
-        if(value == 0){
+        if (value == 0) {
           return 'Please select a value';
         }
       },
@@ -31,13 +42,10 @@ class _MyDropdownButtonState extends State<MyDropdownButton> {
         color: Colors.black,
         overflow: TextOverflow.ellipsis,
       ),
-      enableFeedback: widget.enable,
       decoration: InputDecoration(
-        enabled: widget.enable,
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(20),
-          borderSide: BorderSide.none
-        ),
+            borderRadius: BorderRadius.circular(20),
+            borderSide: BorderSide.none),
         fillColor: Colors.grey.shade200,
         filled: true,
         label: widget.labelText,
@@ -49,7 +57,7 @@ class _MyDropdownButtonState extends State<MyDropdownButton> {
           value: widget.itemList.indexOf(value),
         );
       }).toList(),
-      onChanged: (value) {
+      onChanged: !widget.enable ? null : (value) {
         setState(() {
           dropdownValue = value;
           widget.callback(value);

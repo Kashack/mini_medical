@@ -8,7 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../components/text_form_field.dart';
 import '../../data/database_helper.dart';
-import '../sign_in.dart';
+import '../authentication/sign_in.dart';
 
 class DoctorBioPage extends StatefulWidget {
   @override

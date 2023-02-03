@@ -40,7 +40,8 @@ class OngoingAppointment extends StatelessWidget {
                 Map<String, dynamic> data =
                 document.data()! as Map<String, dynamic>;
                 DateTime endDateTime = data['appointment_end'].toDate();
-                int duration = endDateTime.minute - endDateTime.minute ;
+                DateTime startDateTime = data['appointment_start'].toDate();
+                int duration = endDateTime.minute - startDateTime.minute;
                 String formattedDate = DateFormat.MMMEd().format(endDateTime);
                 String formattedTime = DateFormat.jm().format(endDateTime);
                 if (endDateTime.isBefore(now) || endDateTime == now) {
@@ -62,7 +63,6 @@ class OngoingAppointment extends StatelessWidget {
                     }
                   }
                 }
-
                 return StreamBuilder(
                     stream: _firestore
                         .collection('users')
@@ -132,7 +132,7 @@ class OngoingAppointment extends StatelessWidget {
                                   context,
                                   MaterialPageRoute(
                                     builder: (context) =>
-                                        AppointmentMessage(appointmentId: document.id,)
+                                        AppointmentMessage(appointmentId: document.id,isDoctor: false,)
                                   ),
                                 );
                               },

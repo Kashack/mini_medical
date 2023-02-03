@@ -16,7 +16,7 @@ class DatabaseHelper {
   DatabaseHelper(BuildContext context) {
     this.context = context;
   }
-  Future update(File picPath) async {
+  Future updateProfilePic(File picPath) async {
     final filePath = 'doc_picture/profile_${_auth.currentUser!.uid}';
     final prefs = await SharedPreferences.getInstance();
     try{
@@ -77,6 +77,70 @@ class DatabaseHelper {
     return false;
   }
 
+  Future<bool> updateUserProfile({
+    required String fullname,
+    required DateTime DateOfBirth,
+    required String phoneNumber,
+    required String Gender,
+  })
+  async {
+    try{
+      await _firestore.collection('users')
+          .doc(_auth.currentUser!.uid).update({
+        'fullname': fullname,
+        'dateOfBirth': DateOfBirth,
+        'gender': Gender,
+        'phoneNumber': phoneNumber
+      });
+    } on FirebaseException catch (e) {
+      if (e.code == "network-request-failed") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Network failed'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('${e.code}')));
+      }
+    }
+
+   return false;
+  }
+
+  Future<bool> updateDoctorProfile({
+    required String fullname,
+    required DateTime DateOfBirth,
+    required String phoneNumber,
+    required String description,
+    required String Gender,
+  })
+  async {
+    try{
+      await _firestore.collection('users')
+          .doc(_auth.currentUser!.uid).update({
+        'fullname': fullname,
+        'dateOfBirth': DateOfBirth,
+        'gender': Gender,
+        'description': description,
+        'phoneNumber': phoneNumber
+      });
+    } on FirebaseException catch (e) {
+      if (e.code == "network-request-failed") {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Network failed'),
+          ),
+        );
+      } else {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('${e.code}')));
+      }
+    }
+
+    return false;
+  }
+
   Future<bool> createAnAppointment(
       {required DateTime appointmentStart,
       required DateTime appointmentEnd,
@@ -85,7 +149,6 @@ class DatabaseHelper {
       required String patientAge,
       required String doctorUid,
       required String patientProblem}) async {
-    try {
       await _firestore.collection('appointments').add({
         'doctor_uid': doctorUid,
         'userUid': _auth.currentUser!.uid,
@@ -103,22 +166,38 @@ class DatabaseHelper {
               builder: (context) => HomePage(isDoctor: false),
             ),
             (route) => false);
-      });
-    } on FirebaseException catch (e) {
-      if (e.code == "network-request-failed") {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text('Network failed'),
-          ),
-        );
-      } else {
+      }).onError((error, stackTrace){
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text('${error}')));
+      }).catchError((e){
         ScaffoldMessenger.of(context)
             .showSnackBar(SnackBar(content: Text('${e.code}')));
-      }
-      return false;
-    }
+      });
     return false;
   }
-
-
+  Future<bool> ReScheduleAnAppointment(
+      {required DateTime appointmentStart,
+        required DateTime appointmentEnd,
+        required String appointmentUid,
+        required String doctorUid,}) async {
+    await _firestore.collection('appointments').doc(appointmentUid).update({
+      'appointment_start': appointmentStart,
+      'appointment_end': appointmentEnd,
+      'appointment_status': 'Upcoming',
+    }).then((value) {
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HomePage(isDoctor: false),
+          ),
+              (route) => false);
+    }).onError((error, stackTrace){
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('${error}')));
+    }).catchError((e){
+      ScaffoldMessenger.of(context)
+          .showSnackBar(SnackBar(content: Text('${e.code}')));
+    });
+    return false;
+  }
 }

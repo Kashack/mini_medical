@@ -1,18 +1,22 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:meni_medical/presentation/doctor/appointment_page/upcoming_appointment.dart';
 import 'package:meni_medical/presentation/home_page.dart';
+import 'package:workmanager/workmanager.dart';
 
 import '../../../components/constant.dart';
 
 class DoctorHome extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
 
   @override
   Widget build(BuildContext context) {
+
     final Stream<DocumentSnapshot> userStream =
     _firestore.collection('users').doc(_auth.currentUser!.uid).snapshots();
     return Scaffold(
@@ -64,15 +68,16 @@ class DoctorHome extends StatelessWidget {
                       padding: const EdgeInsets.all(8.0),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: [
                           Text(snapshot.data!.get('fullname'),
                               style: TextStyle(
                                   fontWeight: FontWeight.bold, fontSize: 20)),
                           Text(snapshot.data!.get('email')),
-                          Text(
-                            snapshot.data!.get('description'),
-                            overflow: TextOverflow.fade,
-                          ),
+                          // Text(
+                          //   snapshot.data!.get('description'),
+                          //   overflow: TextOverflow.fade,
+                          // ),
                         ],
                       ),
                     )

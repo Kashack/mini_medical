@@ -5,10 +5,11 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:meni_medical/components/constant.dart';
 import 'package:meni_medical/data/database_helper.dart';
 import 'package:meni_medical/presentation/doctor/bottom_nav/doctor_profile.dart';
 import 'package:meni_medical/presentation/patient/bottom_nav/patient_profile.dart';
-import 'package:meni_medical/presentation/sign_in.dart';
+import 'package:meni_medical/presentation/authentication/sign_in.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class UserProfile extends StatelessWidget {
@@ -66,7 +67,8 @@ class UserProfile extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(50),
                                         image: DecorationImage(
                                             image: CachedNetworkImageProvider(
-                                              snapshot.data!.get('profilePicUrl'),
+                                              snapshot.data!
+                                                  .get('profilePicUrl'),
                                             ),
                                             fit: BoxFit.cover)),
                                   ),
@@ -86,10 +88,10 @@ class UserProfile extends StatelessWidget {
                           ],
                         ),
                         onTap: () async {
-                          final pickedFile =
-                              await _picker.pickImage(source: ImageSource.gallery);
+                          final pickedFile = await _picker.pickImage(
+                              source: ImageSource.gallery);
                           if (pickedFile != null) {
-                            await dbHelper.update(File(pickedFile.path));
+                            await dbHelper.updateProfilePic(File(pickedFile.path));
                           }
                         },
                       ),
@@ -99,7 +101,8 @@ class UserProfile extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(snapshot.data!.get('fullname'),
-                                style: TextStyle(fontWeight: FontWeight.bold,fontSize: 20)),
+                                style: TextStyle(
+                                    fontWeight: FontWeight.bold, fontSize: 20)),
                             Text(snapshot.data!.get('email')),
                           ],
                         ),
@@ -138,14 +141,81 @@ class UserProfile extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                   ListTile(
-                    onTap: () async {
-                      final prefs = await SharedPreferences.getInstance();
-                      await prefs.clear();
-                      FirebaseAuth.instance.signOut();
-                      Navigator.pushAndRemoveUntil(
-                          context,
-                          MaterialPageRoute(builder: (context) => SignInPage()),
-                          (route) => false);
+                    onTap: (){
+                      showModalBottomSheet(
+                        context: context,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.vertical(top: Radius.circular(30)),
+                        ),
+                        builder: (context) {
+                          return Container(
+                            height: 170,
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.spaceEvenly ,
+                              children: [
+                                Text(
+                                  'Logout',
+                                  style: TextStyle(
+                                      color: Colors.red,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                Divider(),
+                                Text(
+                                  'Are sure you want to log out?',
+                                  style: TextStyle(fontWeight: FontWeight.bold),
+                                ),
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                                  children: [
+                                    OutlinedButton(
+                                      onPressed: () {
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text(
+                                        'Cancel',
+                                        style: TextStyle(
+                                            color: MyConstant.mainColor),
+                                      ),
+                                      style: OutlinedButton.styleFrom(
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(20),
+                                          side: BorderSide(
+                                            color: MyConstant.mainColor,
+                                            width: 2
+                                          )
+                                        )
+                                      ),
+                                    ),
+                                    OutlinedButton(
+                                      onPressed: () async {
+                                        final prefs = await SharedPreferences.getInstance();
+                                        await prefs.clear();
+                                        FirebaseAuth.instance.signOut();
+                                        Navigator.pushAndRemoveUntil(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => SignInPage()),
+                                                (route) => false);
+                                      },
+                                      child: Text(
+                                        'Yes, Logout',
+                                        style: TextStyle(
+                                            color: Colors.white,fontWeight: FontWeight.bold),
+                                      ),
+                                      style: OutlinedButton.styleFrom(
+                                        padding: EdgeInsets.all(8),
+                                        shape: RoundedRectangleBorder(
+                                          borderRadius: BorderRadius.circular(10)
+                                        ),
+                                        backgroundColor: MyConstant.mainColor
+                                      ),
+                                    ),
+                                  ],
+                                )
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     },
                     leading: Icon(
                       Icons.exit_to_app,

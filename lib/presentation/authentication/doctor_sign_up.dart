@@ -4,7 +4,7 @@ import 'package:meni_medical/data/authentication.dart';
 
 import '../../components/custom_button.dart';
 import '../../components/text_form_field.dart';
-import '../sign_in.dart';
+import 'sign_in.dart';
 
 class DoctorSignUpPage extends StatefulWidget {
   const DoctorSignUpPage({Key? key}) : super(key: key);
@@ -175,10 +175,10 @@ class _DoctorSignUpPageState extends State<DoctorSignUpPage> {
                           buttonText: 'Sign Up',
                           onPressed: () async {
                             FocusScope.of(context).unfocus();
-                            setState(() {
-                              _isLoading = true;
-                            });
                             if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _isLoading = true;
+                              });
                               bool check =
                                   await authentication.DoctorCreateAnAccount(
                                 email: email!,

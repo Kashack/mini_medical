@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'message_bubble.dart';
 
@@ -21,10 +22,10 @@ class MessageStream extends StatelessWidget {
           return Center(child: const Text('Something went wrong'));
         }
         if (snapshot.connectionState == ConnectionState.waiting) {
-          // return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator());
         }
         if (snapshot.connectionState == ConnectionState.none) {
-          // return Center(child: CircularProgressIndicator());
+          return Center(child: CircularProgressIndicator());
         }
         if (!snapshot.hasData) {
           return Center(
@@ -38,12 +39,16 @@ class MessageStream extends StatelessWidget {
         for (var message in messages) {
           final messageText = message.data()['text'];
           final messageSender = message.data()['sender'];
+          final messageTimeStamp = message.data()['messageTimeStamp'].toDate();
+          String formattedTime = DateFormat.jm().format(messageTimeStamp);
 
           final currentUser = _auth.currentUser!.uid;
 
           final messageBubble = MessageBubble(
             text: messageText,
             isMe: currentUser == messageSender,
+            timeStamp: formattedTime,
+            // timeStamp: TimeOfDay(minute: messageTimeStamp.minute,hour: messageTimeStamp.hour),
           );
 
           messageBubbles.add(messageBubble);

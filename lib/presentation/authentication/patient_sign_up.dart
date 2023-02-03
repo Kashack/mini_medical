@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:meni_medical/presentation/sign_in.dart';
+import 'package:meni_medical/presentation/authentication/sign_in.dart';
 
 import '../../components/custom_button.dart';
 import '../../components/text_form_field.dart';
@@ -149,10 +149,10 @@ class _PatientSignUpState extends State<PatientSignUp> {
                           buttonText: 'Sign Up',
                           onPressed: () async {
                             FocusScope.of(context).unfocus();
-                            setState(() {
-                              _isLoading = true;
-                            });
                             if (_formKey.currentState!.validate()) {
+                              setState(() {
+                                _isLoading = true;
+                              });
                               bool check = await authentication.PatientCreateAnAccount(
                                   email: email!, password: password!,fullname: name!);
                               setState(() {

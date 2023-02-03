@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:meni_medical/presentation/patient/custome_search_delegate.dart';
+import 'package:meni_medical/presentation/patient/doctor_full_list.dart';
 import 'package:meni_medical/presentation/patient/specialist_full_list.dart';
 
 import '../../../components/specialist_button.dart';
@@ -12,7 +14,7 @@ class PatientHome extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
-        title: Text('Home Page',style: TextStyle(color: Colors.black)),
+        title: Text('Home Page', style: TextStyle(color: Colors.black)),
         elevation: 0,
       ),
       body: SafeArea(
@@ -20,22 +22,6 @@ class PatientHome extends StatelessWidget {
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
-              // TextField(
-              //   enabled: false,
-              //   decoration: InputDecoration(
-              //     hintText: 'Search your specialist?',
-              //     filled: true,
-              //     enabledBorder: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(20),
-              //         borderSide: BorderSide(style: BorderStyle.none)),
-              //     focusedBorder: OutlineInputBorder(
-              //         borderRadius: BorderRadius.circular(20),
-              //         borderSide: BorderSide(style: BorderStyle.none)),
-              //     suffixIcon: Icon(
-              //       Icons.search,
-              //     ),
-              //   ),
-              // ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -90,7 +76,14 @@ class PatientHome extends StatelessWidget {
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
                   ),
                   TextButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => DoctorFullList(),
+                        ),
+                      );
+                    },
                     child: Text(
                       'see all',
                       style: TextStyle(

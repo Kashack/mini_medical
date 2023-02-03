@@ -18,6 +18,7 @@ class NotificationApi {
         UILocalNotificationDateInterpretation.absoluteTime,
         androidAllowWhileIdle: true);
   }
+
 static NotificationDetails _notificationDetail() {
     return NotificationDetails(
       android: AndroidNotificationDetails('channel id', 'channel name',importance: Importance.max)

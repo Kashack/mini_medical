@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:meni_medical/components/constant.dart';
 import 'package:meni_medical/data/notification_api.dart';
+import 'package:meni_medical/presentation/patient/book_appointment.dart';
 
 class UpcomingAppointment extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
@@ -42,8 +43,10 @@ class UpcomingAppointment extends StatelessWidget {
                         document.data()! as Map<String, dynamic>;
                     DateTime startDateTime = data['appointment_start'].toDate();
                     DateTime endDateTime = data['appointment_end'].toDate();
-                    String formattedDate = DateFormat.MMMEd().format(startDateTime);
-                    String formattedTime = DateFormat.jm().format(startDateTime);
+                    String formattedDate =
+                        DateFormat.MMMEd().format(startDateTime);
+                    String formattedTime =
+                        DateFormat.jm().format(startDateTime);
                     if (startDateTime.isBefore(now) || startDateTime == now) {
                       try {
                         _firestore
@@ -96,9 +99,9 @@ class UpcomingAppointment extends StatelessWidget {
                               ConnectionState.waiting) {
                             return Center(child: CircularProgressIndicator());
                           }
-                          if (startDateTime.isAfter(now) || startDateTime == now) {
-                            NotificationApi
-                                .showScheduleNotification(
+                          if (startDateTime.isAfter(now) ||
+                              startDateTime == now) {
+                            NotificationApi.showScheduleNotification(
                                 id: 2,
                                 scheduleDate: startDateTime,
                                 title: snapshots.data!.get('fullname'),
@@ -241,9 +244,21 @@ class UpcomingAppointment extends StatelessWidget {
                                       ),
                                     ),
                                     MaterialButton(
-                                      child: Text('Re - schedule'),
+                                      child: Text('Re - schedule',
+                                          style:
+                                              TextStyle(color: Colors.white)),
                                       onPressed: () {
-
+                                        print(document.id);
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(
+                                              builder: (context) =>
+                                                  BookAppointmentPage(
+                                                      doctorUid: data['doctor_uid'],
+                                                      re_schedule: true,
+                                                    appointmentUid: document.id,
+                                                  ),
+                                            ));
                                       },
                                       color: MyConstant.mainColor,
                                     )

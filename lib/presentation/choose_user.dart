@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:meni_medical/presentation/doctor/doctor_sign_up.dart';
-import 'package:meni_medical/presentation/patient/patient_sign_up.dart';
+import 'package:meni_medical/presentation/authentication/doctor_sign_up.dart';
+import 'package:meni_medical/presentation/authentication/patient_sign_up.dart';
 
 import '../components/custom_button.dart';
 

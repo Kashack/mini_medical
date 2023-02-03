@@ -29,6 +29,8 @@ class _BookAppointmentDetailState extends State<BookAppointmentDetail> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget.appointmentEnd);
+    print(widget.appointmentStart);
     DatabaseHelper dbHelper = DatabaseHelper(context);
     return Stack(
       children: [
@@ -128,10 +130,10 @@ class _BookAppointmentDetailState extends State<BookAppointmentDetail> {
                     CustomButton(
                       buttonText: 'Submit',
                       onPressed: () async {
-                        setState(() {
-                          _isLoading = true;
-                        });
                         if (_formKey.currentState!.validate()) {
+                          setState(() {
+                            _isLoading = true;
+                          });
                           bool check = await dbHelper.createAnAppointment(
                               patientFullName: patientFullname!,
                               patientGender: patientGender!,

@@ -4,7 +4,7 @@ import 'package:meni_medical/components/text_form_field.dart';
 import 'package:meni_medical/data/authentication.dart';
 import 'package:meni_medical/presentation/choose_user.dart';
 
-import '../components/custom_button.dart';
+import '../../components/custom_button.dart';
 
 class SignInPage extends StatefulWidget {
   @override
