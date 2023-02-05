@@ -125,17 +125,6 @@ class UserProfile extends StatelessWidget {
                         style: TextStyle(fontWeight: FontWeight.bold)),
                   ),
                   ListTile(
-                    leading:
-                        Icon(Icons.notifications, color: Color(0xFF555FD2)),
-                    title: Text('Notification',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                  ListTile(
-                    leading: Icon(Icons.payment, color: Color(0xFF555FD2)),
-                    title: Text('Payment Detail',
-                        style: TextStyle(fontWeight: FontWeight.bold)),
-                  ),
-                  ListTile(
                     leading: Icon(Icons.settings, color: Color(0xFF555FD2)),
                     title: Text('Setting',
                         style: TextStyle(fontWeight: FontWeight.bold)),
