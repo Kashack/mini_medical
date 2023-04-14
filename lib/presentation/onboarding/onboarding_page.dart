@@ -12,11 +12,29 @@ class OnboardingPage extends StatefulWidget {
 }
 
 class _OnboardingPageState extends State<OnboardingPage> {
-  final _pageViewController = PageController();
-  double current_page = 0;
+  late PageController _pageViewController;
+  double currentPage = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageViewController = PageController(initialPage: 0)..addListener(() {
+        setState(() {
+          currentPage = _pageViewController.page!;
+        });
+      });
+    ;
+  }
+
+  @override
+  void dispose() {
+    _pageViewController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
+    // double progress = _pageViewController.hasClients ? _pageViewController.page ?? 0 : 0;
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -29,11 +47,6 @@ class _OnboardingPageState extends State<OnboardingPage> {
                   controller: _pageViewController,
                   itemCount: 3,
                   itemBuilder: (context, index) {
-                    _pageViewController.addListener(() {
-                      setState(() {
-                        current_page = _pageViewController.page!;
-                      });
-                    });
                     return onboard_slides[index];
                   },
                 ),
@@ -48,12 +61,13 @@ class _OnboardingPageState extends State<OnboardingPage> {
               Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: CustomButton(
-                    buttonText: current_page == 2 ? 'Start' : 'Next',
+                    buttonText: currentPage == 2 ? 'Start' : 'Next',
                     onPressed: () {
-                      if (current_page < 2) {
-                        _pageViewController.animateToPage(_pageViewController.page!.toInt()+1,
-                            duration: Duration(seconds: 1),
-                            curve: Curves.bounceOut);
+                      if (_pageViewController.page != 2) {
+                        _pageViewController.animateToPage(
+                            _pageViewController.page!.toInt() + 1,
+                            duration: Duration(milliseconds: 300),
+                            curve: Curves.ease);
                       } else {
                         Navigator.pushAndRemoveUntil(
                             context,
@@ -94,7 +108,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
                     )),
               ),
               Container(
-                margin: EdgeInsets.symmetric(horizontal: 24,vertical: 8),
+                margin: EdgeInsets.symmetric(horizontal: 24, vertical: 8),
                 child: Text(
                   item['section2'],
                   textAlign: TextAlign.center,
@@ -103,20 +117,20 @@ class _OnboardingPageState extends State<OnboardingPage> {
             ],
           ))
       .toList();
+
   List<Widget> indicator() => List<Widget>.generate(
       slides.length,
-          (index) => Container(
-        margin: EdgeInsets.symmetric(horizontal: 3.0),
-        height: current_page.round() == index ? 20 : 10,
-        width: current_page.round() == index ? 20 : 10,
-        decoration: BoxDecoration(
-            color: current_page.round() == index
-                ? MyConstant.mainColor
-                : Color(0x80555FD2),
-            borderRadius: BorderRadius.circular(30)),
-      ));
+      (index) => Container(
+            margin: EdgeInsets.symmetric(horizontal: 3.0),
+            height: currentPage.round() == index ? 20 : 10,
+            width: currentPage.round() == index ? 20 : 10,
+            decoration: BoxDecoration(
+                color: currentPage.round() == index
+                    ? MyConstant.mainColor
+                    : Color(0x80555FD2),
+                borderRadius: BorderRadius.circular(30)),
+          ));
 }
-
 
 const List slides = [
   {
