@@ -1,16 +1,10 @@
-# meni_medical
+# Mini Medical
 
-A Doctor Appiontment Project.
+Mini Medical is a software program that assists patients in scheduling and managing appointments with healthcare practitioners. Patients can use the app to find healthcare providers, check their availability, and book appointments at their leisure. You can access the app by downloading its mobile software for smartphones or tablets.
 
-## Getting Started
+# Screenshot
+### Book Appointment
+<img height=500 width=250 src="https://github.com/Kashack/mini_medical/blob/master/mini_screenshot/home_page.jpeg" hspace=50/><img height=500 width=250 src="https://github.com/Kashack/mini_medical/blob/master/mini_screenshot/book1.jpeg" hspace=50/><img height=500 width=250 src="https://github.com/Kashack/mini_medical/blob/master/mini_screenshot/book2.jpeg"/><br/>
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### Appointment
+<img height=500 width=250 src="https://github.com/Kashack/mini_medical/blob/master/mini_screenshot/upcoming.jpeg" hspace=50/><img height=500 width=250 src="https://github.com/Kashack/mini_medical/blob/master/mini_screenshot/complete_appointment.jpeg" hspace=50/><img height=500 width=250 src="https://github.com/Kashack/mini_medical/blob/master/mini_screenshot/cancel_appointment.jpeg"/><br/
