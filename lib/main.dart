@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:meni_medical/data/notification_api.dart';
 import 'package:meni_medical/firebase_options.dart';
@@ -12,6 +13,12 @@ import 'presentation/authentication/sign_in.dart';
 bool? isDoctor = false;
 bool? fillBio = false;
 bool? initScreen = true;
+
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  // await Firebase.initializeApp();
+
+  print("Handling a background message: ${message.messageId}");
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -27,6 +34,8 @@ Future<void> main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  await FirebaseMessaging.instance.getInitialMessage();
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
   runApp(const MyApp());
 }
 
@@ -45,7 +54,8 @@ class MyApp extends StatelessWidget {
             elevation: 0,
             color: Colors.white,
             iconTheme: IconThemeData(color: Colors.black),
-          )),
+          )
+      ),
       home: initScreen == true || initScreen == null
           ? OnboardingPage()
           : MainPage(),
