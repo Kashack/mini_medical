@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:meni_medical/components/custom_button.dart';
 import 'package:meni_medical/components/my_time_picker.dart';
+import 'package:meni_medical/components/custom_time_picker.dart';
 import 'package:meni_medical/data/database_helper.dart';
 import 'package:meni_medical/main.dart';
 import 'package:meni_medical/presentation/patient/book_appointment_detail.dart';
@@ -16,25 +17,36 @@ Map durationMap = ({
   '1 hour': 60
 });
 
-class BookAppointmentPage extends StatelessWidget {
+class BookAppointmentPage extends StatefulWidget {
   String doctorUid;
-  int? durations;
   bool re_schedule;
-  TimeOfDay? timeAppointment;
-  DateTime selectedDate = DateTime.now();
-  DateTime mainDate = DateTime.now();
-  var counter = 0;
   String? appointmentUid;
-  bool isSelect = false;
 
   BookAppointmentPage(
       {required this.doctorUid,
       required this.re_schedule,
       this.appointmentUid});
 
+  @override
+  State<BookAppointmentPage> createState() => _BookAppointmentPageState();
+}
+
+class _BookAppointmentPageState extends State<BookAppointmentPage> {
+  int? durations;
+
+  TimeOfDay? timeAppointment;
+
+  DateTime selectedDate = DateTime.now();
+
+  DateTime mainDate = DateTime.now();
+
+  var counter = 0;
+
+  bool isSelect = false;
+
   DateTime checkTime() {
     if (DateTime.now().isAfter(
-        DateTime(mainDate.year, mainDate.month, mainDate.day, 17, 30))) {
+        DateTime(mainDate.year, mainDate.month, mainDate.day, 18, 00))) {
       return DateTime(mainDate.year, mainDate.month, mainDate.day + 1);
     } else {
       return mainDate;
@@ -73,7 +85,9 @@ class BookAppointmentPage extends StatelessWidget {
                 lastDate:
                     DateTime(DateTime.now().year, DateTime.now().month + 6),
                 onDateChanged: (DateTime value) {
-                  selectedDate = value;
+                  setState(() {
+                    selectedDate = value;
+                  });
                 },
               ),
               Text(
@@ -82,11 +96,15 @@ class BookAppointmentPage extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
-                  height: 150,
-                  child: MyTimePicker(
-                    callback: (value) => timeAppointment = value,
-                  )),
+              // SizedBox(
+              //     height: 150,
+              //     child: MyTimePicker(
+              //       callback: (value) => timeAppointment = value,
+              //     )),
+
+              TimePickerWidget(selectedDate: checkTime(),
+              ),
+
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Text(
@@ -101,7 +119,7 @@ class BookAppointmentPage extends StatelessWidget {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: re_schedule == false
+                child: widget.re_schedule == false
                     ? CustomButton(
                         buttonText: 'Next',
                         onPressed: () {
@@ -126,7 +144,7 @@ class BookAppointmentPage extends StatelessWidget {
                                           selectedDate.day,
                                           timeAppointment!.hour,
                                           timeAppointment!.minute),
-                                      doctorUid: doctorUid,
+                                      doctorUid: widget.doctorUid,
                                       appointmentEnd: DateTime(
                                               selectedDate.year,
                                               selectedDate.month,
@@ -156,7 +174,7 @@ class BookAppointmentPage extends StatelessWidget {
                     : CustomButton(
                         buttonText: 'Re-schedule',
                         onPressed: () async {
-                          print(appointmentUid);
+                          print(widget.appointmentUid);
                           final currentTime = DateTime(
                               mainDate.year,
                               mainDate.month,
@@ -180,8 +198,8 @@ class BookAppointmentPage extends StatelessWidget {
                                     selectedDate.day,
                                     timeAppointment!.hour,
                                     timeAppointment!.minute),
-                                appointmentUid: appointmentUid!,
-                                doctorUid: doctorUid);
+                                appointmentUid: widget.appointmentUid!,
+                                doctorUid: widget.doctorUid);
                           } else if (currentTime.isBefore(DateTime.now())) {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 SnackBar(content: Text('Select Valid Time')));
