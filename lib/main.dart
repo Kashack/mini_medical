@@ -7,6 +7,7 @@ import 'package:meni_medical/firebase_options.dart';
 import 'package:meni_medical/presentation/home_page.dart';
 import 'package:meni_medical/presentation/onboarding/onboarding_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'components/constant.dart';
 import 'presentation/doctor/doctor_bio.dart';
 import 'presentation/authentication/sign_in.dart';
 
@@ -49,7 +50,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-          primarySwatch: Colors.blue,
+          colorScheme: ColorScheme.light(primary:  MyConstant.mainColor),
           appBarTheme: AppBarTheme(
             elevation: 0,
             color: Colors.white,

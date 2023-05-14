@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:meni_medical/components/appointmentShimmer.dart';
 import 'package:meni_medical/presentation/patient/book_appointment.dart';
 
 import '../../../components/constant.dart';
@@ -56,7 +57,10 @@ class CompletedAppointment extends StatelessWidget {
                           }
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
+                            return ShimmerLoading();
+                          }
+                          if (snapshot.connectionState == ConnectionState.none) {
+                            return ShimmerLoading();
                           }
                           return Container(
                             height: 180,
@@ -112,7 +116,7 @@ class CompletedAppointment extends StatelessWidget {
                                   children: [
                                     OutlinedButton(
                                       onPressed: () {
-                                        Navigator.push(context, MaterialPageRoute(builder: (context) => BookAppointmentPage(doctorUid: data['doctor_uid'], re_schedule: false),));
+                                        Navigator.push(context, MaterialPageRoute(builder: (context) => BookAppointmentPage(doctorUid: data['doctor_uid'], reSchedule: false),));
                                       },
                                       style: OutlinedButton.styleFrom(
                                           side: BorderSide(

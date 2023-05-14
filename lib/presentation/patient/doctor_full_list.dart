@@ -76,7 +76,7 @@ class DoctorFullList extends StatelessWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => BookAppointmentPage(doctorUid: document.id,re_schedule: false  ,),
+                            builder: (context) => BookAppointmentPage(doctorUid: document.id,reSchedule: false  ,),
                           ));
                     },
                     style: OutlinedButton.styleFrom(

@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
+import 'package:meni_medical/components/constant.dart';
 import 'package:meni_medical/components/custom_button.dart';
-import 'package:meni_medical/components/my_time_picker.dart';
 import 'package:meni_medical/components/custom_time_picker.dart';
 import 'package:meni_medical/data/database_helper.dart';
-import 'package:meni_medical/main.dart';
 import 'package:meni_medical/presentation/patient/book_appointment_detail.dart';
 
 import '../../components/my_dropdownbutton.dart';
@@ -19,12 +17,12 @@ Map durationMap = ({
 
 class BookAppointmentPage extends StatefulWidget {
   String doctorUid;
-  bool re_schedule;
+  bool reSchedule;
   String? appointmentUid;
 
   BookAppointmentPage(
       {required this.doctorUid,
-      required this.re_schedule,
+      required this.reSchedule,
       this.appointmentUid});
 
   @override
@@ -61,10 +59,15 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
-        title: Text('Book Appointment', style: TextStyle(color: Colors.black)),
-        leading: Icon(
-          Icons.arrow_back,
-          color: Colors.black,
+        title: const Text('Book Appointment', style: TextStyle(color: Colors.black)),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          ),
         ),
       ),
       body: Padding(
@@ -73,7 +76,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
+              const Text(
                 'Select Date',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
@@ -82,31 +85,27 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
               CalendarDatePicker(
                 firstDate: checkTime(),
                 initialDate: checkTime(),
-                lastDate:
-                    DateTime(DateTime.now().year, DateTime.now().month + 6),
+                lastDate: DateTime(DateTime.now().year, DateTime.now().month + 6),
                 onDateChanged: (DateTime value) {
                   setState(() {
                     selectedDate = value;
                   });
                 },
               ),
-              Text(
+              const Text(
                 'Select Time',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              // SizedBox(
-              //     height: 150,
-              //     child: MyTimePicker(
-              //       callback: (value) => timeAppointment = value,
-              //     )),
-
-              TimePickerWidget(selectedDate: checkTime(),
+              SizedBox(
+                height: 150,
+                child: TimePickerWidget(selectedDate: checkTime(), callback: (value) => timeAppointment = value,
+                ),
               ),
 
-              Padding(
-                padding: const EdgeInsets.all(8.0),
+              const Padding(
+                padding: EdgeInsets.all(8.0),
                 child: Text(
                   'Select Duration',
                   style: TextStyle(fontWeight: FontWeight.bold),
@@ -119,10 +118,11 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: widget.re_schedule == false
+                child: widget.reSchedule == false
                     ? CustomButton(
                         buttonText: 'Next',
                         onPressed: () {
+                          print(timeAppointment);
                           final currentTime = DateTime(
                               mainDate.year,
                               mainDate.month,
@@ -156,16 +156,16 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                                   ));
                             } else if (currentTime.isBefore(DateTime.now())) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('Select Valid Time')));
+                                  const SnackBar(content: Text('Select Valid Time')));
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
+                                  const SnackBar(
                                       content:
                                           Text('Select Duration or Time')));
                             }
                           }else{
                             ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(
+                                const SnackBar(
                                     content:
                                     Text('Select Duration or Time')));
                           }
@@ -185,7 +185,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                               timeAppointment != null &&
                               (currentTime.isAfter(DateTime.now()) ||
                                   selectedDate != mainDate)) {
-                            bool check = await dbHelper.ReScheduleAnAppointment(
+                            await dbHelper.ReScheduleAnAppointment(
                                 appointmentStart: DateTime(
                                     selectedDate.year,
                                     selectedDate.month,
@@ -202,9 +202,9 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                                 doctorUid: widget.doctorUid);
                           } else if (currentTime.isBefore(DateTime.now())) {
                             ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Select Valid Time')));
+                                const SnackBar(content: Text('Select Valid Time')));
                           } else {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
                                 content: Text('Select Duration or Time')));
                           }
                         },

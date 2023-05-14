@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:meni_medical/components/appointmentShimmer.dart';
 import 'package:meni_medical/components/constant.dart';
 import 'package:meni_medical/data/notification_api.dart';
 import 'package:meni_medical/presentation/patient/book_appointment.dart';
@@ -27,13 +28,13 @@ class UpcomingAppointment extends StatelessWidget {
         stream: upcomingStream,
         builder: (context, snapshot) {
           if (snapshot.hasError) {
-            return Center(child: const Text('Something went wrong'));
+            return const Center(child: Text('Something went wrong'));
           }
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.connectionState == ConnectionState.none) {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
           if (snapshot.hasData && snapshot.data!.docs.isEmpty == false) {
             return ListView(
@@ -56,7 +57,7 @@ class UpcomingAppointment extends StatelessWidget {
                       } on FirebaseException catch (e) {
                         if (e.code == "network-request-failed") {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                            const SnackBar(
                               content: Text('Network failed'),
                             ),
                           );
@@ -75,7 +76,7 @@ class UpcomingAppointment extends StatelessWidget {
                       } on FirebaseException catch (e) {
                         if (e.code == "network-request-failed") {
                           ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
+                            const SnackBar(
                               content: Text('Network failed'),
                             ),
                           );
@@ -92,12 +93,11 @@ class UpcomingAppointment extends StatelessWidget {
                             .snapshots(),
                         builder: (context, snapshots) {
                           if (snapshots.hasError) {
-                            return Center(
-                                child: const Text('Something went wrong'));
+                            return const ShimmerLoading();
                           }
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
+                            return const ShimmerLoading();
                           }
                           if (startDateTime.isAfter(now) ||
                               startDateTime == now) {
@@ -110,9 +110,9 @@ class UpcomingAppointment extends StatelessWidget {
                           }
                           return Container(
                             height: 160,
-                            margin: EdgeInsets.symmetric(
+                            margin: const EdgeInsets.symmetric(
                                 vertical: 8, horizontal: 16),
-                            padding: EdgeInsets.all(8),
+                            padding: const EdgeInsets.all(8),
                             decoration: BoxDecoration(
                                 color: Colors.white,
                                 borderRadius: BorderRadius.circular(15)),
@@ -145,7 +145,7 @@ class UpcomingAppointment extends StatelessWidget {
                                           children: [
                                             Text(
                                               'Dr. ${snapshots.data!.get('fullname')}',
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontWeight: FontWeight.bold),
                                             ),
                                             Text(data['appointment_status']),
@@ -157,7 +157,7 @@ class UpcomingAppointment extends StatelessWidget {
                                     ],
                                   ),
                                 ),
-                                Divider(),
+                                const Divider(),
                                 Row(
                                   mainAxisAlignment:
                                       MainAxisAlignment.spaceEvenly,
@@ -168,10 +168,10 @@ class UpcomingAppointment extends StatelessWidget {
                                           context: context,
                                           builder: (context) {
                                             return AlertDialog(
-                                              title: Text('Cancel Appointment'),
+                                              title: const Text('Cancel Appointment'),
                                               titleTextStyle:
-                                                  TextStyle(color: Colors.red),
-                                              content: Text(
+                                                  const TextStyle(color: Colors.red),
+                                              content: const Text(
                                                   'Are u sure u want Cancel the appointment'),
                                               actions: [
                                                 TextButton(
@@ -185,7 +185,7 @@ class UpcomingAppointment extends StatelessWidget {
                                                                   BorderRadius
                                                                       .circular(
                                                                           20))),
-                                                  child: Text('Back'),
+                                                  child: const Text('Back'),
                                                 ),
                                                 TextButton(
                                                   onPressed: () {
@@ -206,7 +206,7 @@ class UpcomingAppointment extends StatelessWidget {
                                                         ScaffoldMessenger.of(
                                                                 context)
                                                             .showSnackBar(
-                                                          SnackBar(
+                                                          const SnackBar(
                                                             content: Text(
                                                                 'Network failed'),
                                                           ),
@@ -227,7 +227,7 @@ class UpcomingAppointment extends StatelessWidget {
                                                                   BorderRadius
                                                                       .circular(
                                                                           20))),
-                                                  child: Text('Confirm'),
+                                                  child: const Text('Confirm'),
                                                 ),
                                               ],
                                             );
@@ -244,7 +244,7 @@ class UpcomingAppointment extends StatelessWidget {
                                       ),
                                     ),
                                     MaterialButton(
-                                      child: Text('Re - schedule',
+                                      child: const Text('Re - schedule',
                                           style:
                                               TextStyle(color: Colors.white)),
                                       onPressed: () {
@@ -255,7 +255,7 @@ class UpcomingAppointment extends StatelessWidget {
                                               builder: (context) =>
                                                   BookAppointmentPage(
                                                       doctorUid: data['doctor_uid'],
-                                                      re_schedule: true,
+                                                      reSchedule: true,
                                                     appointmentUid: document.id,
                                                   ),
                                             ));
@@ -277,10 +277,10 @@ class UpcomingAppointment extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              SizedBox(
+              const SizedBox(
                 width: double.infinity,
               ),
-              Text(
+              const Text(
                 'You don\'t have an appointment yet',
                 style: TextStyle(fontWeight: FontWeight.bold),
               ),

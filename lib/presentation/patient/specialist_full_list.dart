@@ -13,13 +13,13 @@ class SpecialistFullList extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 16.0),
+              const Padding(
+                padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: Text('Specialist List',style: TextStyle(fontWeight: FontWeight.bold,fontSize: 24),),
               ),
               Expanded(
                 child: GridView(
-                  gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                     crossAxisCount: 3,
                   ),
                   children: const [

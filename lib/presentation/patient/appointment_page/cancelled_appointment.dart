@@ -4,6 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../../../components/appointmentShimmer.dart';
+
 class CancelledAppointment extends StatelessWidget {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseAuth _auth = FirebaseAuth.instance;
@@ -46,12 +48,11 @@ class CancelledAppointment extends StatelessWidget {
                             .snapshots(),
                         builder: (context, snapshots) {
                           if (snapshots.hasError) {
-                            return Center(
-                                child: const Text('Something went wrong'));
+                            return const ShimmerLoading();
                           }
                           if (snapshots.connectionState ==
                               ConnectionState.waiting) {
-                            return Center(child: CircularProgressIndicator());
+                            return ShimmerLoading();
                           }
                           return Container(
                             height: 120,
